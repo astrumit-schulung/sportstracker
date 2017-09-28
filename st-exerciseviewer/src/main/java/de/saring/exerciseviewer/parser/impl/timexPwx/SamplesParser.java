@@ -64,7 +64,8 @@ public class SamplesParser {
                         }
                     }
                 }
-            	lastSample = sample;
+                // TODO I think we have to update the last sample
+//            	lastSample = sample;
             }
         }
 
