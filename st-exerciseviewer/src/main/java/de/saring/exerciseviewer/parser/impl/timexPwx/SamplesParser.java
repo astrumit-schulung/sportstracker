@@ -46,7 +46,9 @@ public class SamplesParser {
             	ExerciseSample sample = sampleParser.parse(sampleNode);
            	
             	// TODO set cadence
-                //exercise.getRecordingMode().setCadence(true);
+            	if (sample.getCadence() != 0) {
+            		exercise.getRecordingMode().setCadence(true);
+            	}
             	
                 // Eliminates the jitters of 0bpm samples... assumes that heart rate won't change instantiously by much and
                 // that there will only be the occasional missed heart beat.  Also fixes the laps not adding up.
