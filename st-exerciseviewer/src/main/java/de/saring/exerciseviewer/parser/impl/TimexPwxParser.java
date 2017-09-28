@@ -4,6 +4,7 @@ import de.saring.exerciseviewer.core.EVException;
 import de.saring.exerciseviewer.data.*;
 import de.saring.exerciseviewer.parser.AbstractExerciseParser;
 import de.saring.exerciseviewer.parser.ExerciseParserInfo;
+import de.saring.exerciseviewer.parser.impl.timexPwx.SampleParserFactory;
 import de.saring.exerciseviewer.parser.impl.timexPwx.SamplesParser;
 import de.saring.util.unitcalc.CalculationUtils;
 import org.w3c.dom.Document;
@@ -269,7 +270,8 @@ public class TimexPwxParser extends AbstractExerciseParser {
         // parse lap segments
         exercise = parseWorkoutSegments(exercise, workoutNode);
         // parse samples
-        exercise = SamplesParser.parseWorkoutSamples(exercise, workoutNode);
+        SamplesParser samplesParser = new SamplesParser(new SampleParserFactory());
+        exercise = samplesParser.parseWorkoutSamples(exercise, workoutNode);
         return exercise;
     }
 

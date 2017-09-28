@@ -11,7 +11,14 @@ import de.saring.exerciseviewer.data.Position;
 import de.saring.util.unitcalc.CalculationUtils;
 
 public class SamplesParser {
-    public static EVExercise parseWorkoutSamples(EVExercise exercise, Node workoutNode) {
+	
+	private SampleParserFactory sampleParserFactory;
+
+	public SamplesParser(SampleParserFactory sampleParserFactory) {
+		this.sampleParserFactory = sampleParserFactory;
+	}
+	
+    public EVExercise parseWorkoutSamples(EVExercise exercise, Node workoutNode) {
         // obtain all the sample data.
         int totalSamples = countNodeItems(workoutNode, "sample");
         int currentSampleNumber = 0;
@@ -28,7 +35,7 @@ public class SamplesParser {
         
         int istop = children.getLength(); // getLength() is a slow function so keep it out of the loop.
         
-        SampleParser sampleParser = new SampleParser();
+        SampleParser sampleParser = sampleParserFactory.create();
         
         for (int i = 0; i < istop; i++) {
             childName = children.item(i).getNodeName();
