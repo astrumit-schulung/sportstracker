@@ -6,6 +6,7 @@ import de.saring.exerciseviewer.parser.AbstractExerciseParser;
 import de.saring.exerciseviewer.parser.ExerciseParserInfo;
 import de.saring.exerciseviewer.parser.impl.timexPwx.SampleParserFactory;
 import de.saring.exerciseviewer.parser.impl.timexPwx.SamplesParser;
+import de.saring.exerciseviewer.parser.impl.timexPwx.SummaryData;
 import de.saring.exerciseviewer.parser.impl.timexPwx.SummaryDataParser;
 import de.saring.util.unitcalc.CalculationUtils;
 import org.w3c.dom.Document;
@@ -49,129 +50,6 @@ public class TimexPwxParser extends AbstractExerciseParser {
      * Informations about this parser.
      */
     private final ExerciseParserInfo info = new ExerciseParserInfo("Timex PWX", new String[]{"pwx", "PWX"});
-
-    public static class MinMaxAvg {
-        private float min = 0;
-        private float max = 0;
-        private float avg = 0;
-
-        public void setMin(float in) {
-            min = in;
-        }
-
-        public float getMin() {
-            return min;
-        }
-
-        public void setMax(float in) {
-            max = in;
-        }
-
-        public float getMax() {
-            return max;
-        }
-
-        public void setAvg(float in) {
-            avg = in;
-        }
-
-        public float getAvg() {
-            return avg;
-        }
-    }
-
-    public static class SummaryData {
-        private double beginning = 0;
-        private double duration = 0;
-        private int work = 0;
-        private MinMaxAvg hr;
-        //        private double durationStopped = 0;
-//        private float tss = 0;
-//        private int normalizedPower = 0;
-        private MinMaxAvg speed;
-        //        private MinMaxAvg power;
-//        private MinMaxAvg torque;
-//        private MinMaxAvg cadence;
-        private float distance = 0;
-        private MinMaxAvg altitude;
-//        private MinMaxAvg temperature;
-//        private int variabilityIndex = 0;
-//        private float climbingElevation = 0;
-
-        public void setBeginning(double in) {
-            beginning = in;
-        }
-
-        public double getBeginning() {
-            return beginning;
-        }
-
-        public void setDuration(double in) {
-            duration = in;
-        }
-
-        public double getDuration() {
-            return duration;
-        }
-
-        public void setWork(int in) {
-            work = in;
-        }
-
-        public int getWork() {
-            return work;
-        }
-
-        public void setHr(MinMaxAvg in) {
-            hr = in;
-        }
-
-        public MinMaxAvg getHr() {
-            return hr;
-        }
-
-        //        public void setDurationStopped(double in){ durationStopped = in; }
-//        public double getDurationStopped(){ return durationStopped; }
-//        public void setTss(float in){ tss = in; }
-//        public float getTss(){ return tss; }
-//        public void setNormalizedPower(int in){ normalizedPower = in; }
-//        public int getNormalizedPower(){ return normalizedPower; }
-        public void setSpeed(MinMaxAvg in) {
-            speed = in;
-        }
-
-        public MinMaxAvg getSpeed() {
-            return speed;
-        }
-
-        //        public void setPower(MinMaxAvg in){ power = in; }
-//        public MinMaxAvg getPower(){ return power ; }
-//        public void setTorque(MinMaxAvg in){ torque = in; }
-//        public MinMaxAvg getTorque(){ return torque; }
-//        public void setCadence(MinMaxAvg in){ cadence = in; }
-//        public MinMaxAvg getCadence(){ return cadence; }
-        public void setDistance(float in) {
-            distance = in;
-        }
-
-        public float getDistance() {
-            return distance;
-        }
-
-        public void setAltitude(MinMaxAvg in) {
-            altitude = in;
-        }
-
-        public MinMaxAvg getAltitude() {
-            return altitude;
-        }
-//        public void setTemperature(MinMaxAvg in){ temperature  = in; }
-//        public MinMaxAvg getTemperature(){ return temperature; }
-//        public void setVariabilityIndex(int in){ variabilityIndex = in; }
-//        public int getVariabilityIndex(){ return variabilityIndex; }
-//        public void setClimbingElevation(float in){ climbingElevation = in; }
-//        public float getClimbingElevation(){ return climbingElevation; }
-    }
 
     @Override
     public ExerciseParserInfo getInfo() {

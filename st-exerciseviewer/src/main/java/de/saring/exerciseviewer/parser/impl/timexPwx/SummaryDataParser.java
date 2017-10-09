@@ -4,9 +4,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import de.saring.exerciseviewer.parser.impl.TimexPwxParser.MinMaxAvg;
-import de.saring.exerciseviewer.parser.impl.TimexPwxParser.SummaryData;
-
 public class SummaryDataParser {
     public static SummaryData parseSummaryData(Node summaryDataNode) {
         SummaryData nodeSummaryData = new SummaryData();
