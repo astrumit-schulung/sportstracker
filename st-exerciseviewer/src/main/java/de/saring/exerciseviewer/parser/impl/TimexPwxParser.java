@@ -6,6 +6,7 @@ import de.saring.exerciseviewer.parser.AbstractExerciseParser;
 import de.saring.exerciseviewer.parser.ExerciseParserInfo;
 import de.saring.exerciseviewer.parser.impl.timexPwx.SampleParserFactory;
 import de.saring.exerciseviewer.parser.impl.timexPwx.SamplesParser;
+import de.saring.exerciseviewer.parser.impl.timexPwx.SummaryDataParser;
 import de.saring.util.unitcalc.CalculationUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -49,7 +50,7 @@ public class TimexPwxParser extends AbstractExerciseParser {
      */
     private final ExerciseParserInfo info = new ExerciseParserInfo("Timex PWX", new String[]{"pwx", "PWX"});
 
-    private static class MinMaxAvg {
+    public static class MinMaxAvg {
         private float min = 0;
         private float max = 0;
         private float avg = 0;
@@ -79,22 +80,7 @@ public class TimexPwxParser extends AbstractExerciseParser {
         }
     }
 
-    private MinMaxAvg node2MinMaxAvg(Node inNode) {
-        MinMaxAvg result = new MinMaxAvg();
-        NamedNodeMap attributes = inNode.getAttributes();
-        for (int i = 0; i < attributes.getLength(); i++) {
-            if (attributes.item(i).getNodeName().equals("max")) {
-                result.setMax(Float.valueOf(attributes.item(i).getTextContent()));
-            } else if (attributes.item(i).getNodeName().equals("min")) {
-                result.setMin(Float.valueOf(attributes.item(i).getTextContent()));
-            } else if (attributes.item(i).getNodeName().equals("avg")) {
-                result.setAvg(Float.valueOf(attributes.item(i).getTextContent()));
-            }
-        }
-        return result;
-    }
-
-    private static class SummaryData {
+    public static class SummaryData {
         private double beginning = 0;
         private double duration = 0;
         private int work = 0;
@@ -230,7 +216,7 @@ public class TimexPwxParser extends AbstractExerciseParser {
                     break;
                 case "summarydata":
                     // parse workout summary data
-                    SummaryData workoutSummary = parseSummaryData(children.item(i));
+                    SummaryData workoutSummary = SummaryDataParser.parseSummaryData(children.item(i));
                     exercise.setDuration((int) workoutSummary.getDuration() * 10);
                     exercise.setSumExerciseTime((int) workoutSummary.getDuration() / 60); // Not sure why these are different.
                     exercise.setSumRideTime((int) workoutSummary.getDuration() / 60);  // Assume some watches keep track of bike specific time..This one doesn't
@@ -474,49 +460,7 @@ public class TimexPwxParser extends AbstractExerciseParser {
         return exercise;
     }
 
-    private SummaryData parseSummaryData(Node summaryDataNode) {
-        SummaryData nodeSummaryData = new SummaryData();
-        NodeList children = summaryDataNode.getChildNodes();
 
-        String childName;
-        for (int i = 0; i < children.getLength(); i++) {
-            childName = children.item(i).getNodeName();
-            if (childName.equals("beginning")) {
-                // obtain beginning time
-                nodeSummaryData.setBeginning(Double.valueOf(children.item(i).getTextContent()));
-            } else if (childName.equals("duration")) {
-                // obtain duration
-                nodeSummaryData.setDuration(Double.valueOf(children.item(i).getTextContent()));
-            } else if (childName.equals("hr")) {
-                // obtain hr (MinMaxAvg)  (bpm)
-                nodeSummaryData.setHr(node2MinMaxAvg(children.item(i)));
-            } else if (childName.equals("work")) {
-                // obtain work (Apparently Not used in Laps) (kJ)
-                nodeSummaryData.setWork(Integer.valueOf(children.item(i).getTextContent()));
-            } else if (childName.equals("spd")) {
-                // obtain spd (MinMaxAvg) (meters/second)
-                nodeSummaryData.setSpeed(node2MinMaxAvg(children.item(i)));
-            } else if (childName.equals("alt")) {
-                // obtain altitude (MinMaxAvg) (meters)
-                nodeSummaryData.setAltitude(node2MinMaxAvg(children.item(i)));
-            } else if (childName.equals("dist")) {
-                // obtain distance (meters)
-                nodeSummaryData.setDistance(Float.valueOf(children.item(i).getTextContent()));
-            }
-            // 1st time its for the entire workout
-            // remaining times is for the Laps
-            // obtain duration stopped
-            // obtain tss
-            // obtain normalizedPower (watts)
-            // obtain pwr (MinMaxAvg) (watts)
-            // obtain torq (MinMaxAvg) (nM)
-            // obtain cadence (MinMaxAvg) (rpm)
-            // obtain temp (MinMaxAvg) (C)
-            // obtain variabilityIndex - Not sure what this is
-            // obtain climbingelevation
-        }
-        return nodeSummaryData; // Probably don't want to pass and return the Exercise itself.
-    }
 
     private EVExercise parseWorkoutSegments(EVExercise exercise, Node workoutNode) {
         ArrayList<Lap> laps = new ArrayList<>();
@@ -553,7 +497,7 @@ public class TimexPwxParser extends AbstractExerciseParser {
                 for (int j = 0; j < segmentChildren.getLength(); j++) {
                     childName = segmentChildren.item(j).getNodeName();
                     if (childName.equals("summarydata")) {
-                        SummaryData segmentSummary = parseSummaryData(segmentChildren.item(j));
+                        SummaryData segmentSummary = SummaryDataParser.parseSummaryData(segmentChildren.item(j));
                         lap.setTimeSplit((int) ((segmentSummary.getDuration() + segmentSummary.getBeginning()) * 10));
                         if (segmentSummary.getDistance() != 0) {
                             runningDistance += segmentSummary.getDistance();
